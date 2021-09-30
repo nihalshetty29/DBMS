@@ -6,8 +6,8 @@
 
 body {
   background: white;
-  font-family: "Raleway" sans-serif;
-  background: url("./store.jpg") no-repeat center center/cover;
+  font-family: 'Raleway' sans-serif;
+  background: url('./store.jpg') no-repeat center center/cover;
 }
 
 a {

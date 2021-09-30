@@ -1,3 +1,7 @@
+<?php
+session_start();
+require_once('inc/header.html');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,17 +15,24 @@
 </head>
 
 <body>
-  <div id="container">
-    <div class="form-wrap">
-      <h1>Store Management System</h1>
-      <form>
-        <p>Select Your Role:</p>
-        <button type="button" id="customer-login" class="btn">Customer</button></a>
-        <button type="button" id="admin-login" class="btn">Admin</button></a>
-      </form>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-5 col-lg-5">
+        <div class="card">
+          <div class="card-header">
+            Role:
+          </div>
+          <div class="card-body">
+            <button type="button" id="admin-login" class="btn btn-primary btn-block">Admin</button>
+            <button type="button" id="customer-login" class="btn btn-primary btn-block">Customer</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <script src="./js/scripts.js"></script>
+  <?php
+  require 'inc/footer.php';
+  ?>
 </body>
 
 </html>
