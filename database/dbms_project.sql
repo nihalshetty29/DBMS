@@ -206,9 +206,11 @@ CREATE TABLE `item` (
   `productID` int(11) NOT NULL,
   `itemNumber` varchar(255) NOT NULL,
   `itemName` varchar(255) NOT NULL,
+  `discount` float NOT NULL DEFAULT '0',
   `stock` int(11) NOT NULL DEFAULT '0',
   `unitPrice` float NOT NULL DEFAULT '0',
   `imageURL` varchar(255) NOT NULL DEFAULT 'imageNotAvailable.jpg',
+  `status` varchar(255) NOT NULL DEFAULT 'Active',
   `description` text NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -217,9 +219,11 @@ INSERT INTO
     `productID`,
     `itemNumber`,
     `itemName`,
+    `discount`,
     `stock`,
     `unitPrice`,
     `imageURL`,
+    `status`,
     `description`
   )
 VALUES
@@ -227,45 +231,55 @@ VALUES
     34,
     '1',
     'First Bag',
+    0,
     28,
     1500,
     '1525670999_1.png',
+    'Active',
     ''
   ),
   (
     35,
     '2',
     'School Bag',
+    0,
     5,
     500,
     '1525681111_661539.png',
+    'Active',
     ''
   ),
   (
     36,
     '3',
     'Office Bag',
+    0,
     5,
     1300,
     '1525709924_office bag.jpg',
+    'Active',
     ''
   ),
   (
     37,
     '4',
     'Leather Bag',
+    2,
     6,
     3409,
     '1525710010_leather bag.jpg',
+    'Active',
     ''
   ),
   (
     38,
     '5',
     'Travel Bag',
+    2,
     17,
     1200,
     '1525706032_travel bag.jpg',
+    'Active',
     ''
   ),
   (
@@ -273,53 +287,65 @@ VALUES
     '6',
     'Gym Bag',
     0,
+    0,
     3000,
     '1525710463_gym bag.jpg',
+    'Active',
     ''
   ),
   (
     40,
     '7',
     'Handbag',
+    1.5,
     10,
     1650,
     '1525713267_handbag.jpg',
+    'Active',
     ''
   ),
   (
     41,
     '8',
     'Laptop Bag',
+    2.1,
     9,
     2300,
     '1525750683_661539.png',
+    'Active',
     ''
   ),
   (
     43,
     '10',
     'Sports Bag',
+    1,
     92,
     1000,
     '1525756289_sports bag.jpg',
+    'Active',
     ''
   ),
   (
     45,
     '11',
     'First Aid Bag',
+    1.5,
     11,
     1200,
     '1525787551_first aid bag.jpg',
+    'Active',
     ''
   ),
   (
     49,
     '14',
     'Hiking Bag',
+    1.5,
     6,
     1200,
     '1526297640_hiking bag.jpg',
+    'Active',
     'This is a hiking bag. Ideal for long distance hikes. Light-weight and water proof.'
   );
 

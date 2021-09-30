@@ -10,6 +10,10 @@ customerDetailsSearchTableCreatorFile =
 itemDetailsSearchTableCreatorFile =
   'model/item/itemDetailsSearchTableCreator.php';
 
+// File that creates the vendor details search table
+vendorDetailsSearchTableCreatorFile =
+  'model/vendor/vendorDetailsSearchTableCreator.php';
+
 // File that creates the sale details search table
 saleDetailsSearchTableCreatorFile =
   'model/sale/saleDetailsSearchTableCreator.php';
@@ -21,6 +25,21 @@ purchaseReportsSearchTableCreatorFile =
 // File that creates the customer reports search table
 customerReportsSearchTableCreatorFile =
   'model/customer/customerReportsSearchTableCreator.php';
+
+// File that creates the item reports search table
+itemReportsSearchTableCreatorFile =
+  'model/item/itemReportsSearchTableCreator.php';
+
+// File that creates the vendor reports search table
+vendorReportsSearchTableCreatorFile =
+  'model/vendor/vendorReportsSearchTableCreator.php';
+
+// File that creates the sale reports search table
+saleReportsSearchTableCreatorFile =
+  'model/sale/saleReportsSearchTableCreator.php';
+
+// File that returns the last inserted vendorID
+vendorLastInsertedIDFile = 'model/vendor/populateLastVendorID.php';
 
 // File that returns the last inserted customerID
 customerLastInsertedIDFile = 'model/customer/populateLastCustomerID.php';
@@ -40,6 +59,9 @@ showPurchaseIDSuggestionsFile = 'model/purchase/showPurchaseIDs.php';
 
 // File that returns saleIDs
 showSaleIDSuggestionsFile = 'model/sale/showSaleIDs.php';
+
+// File that returns vendorIDs
+showVendorIDSuggestionsFile = 'model/vendor/showVendorIDs.php';
 
 // File that returns customerIDs
 showCustomerIDSuggestionsFile = 'model/customer/showCustomerIDs.php';
@@ -97,6 +119,11 @@ $(document).ready(function () {
     addCustomer();
   });
 
+  // Listen to vendor add button
+  $('#addVendor').on('click', function () {
+    addVendor();
+  });
+
   // Listen to item add button
   $('#addItem').on('click', function () {
     addItem();
@@ -120,6 +147,11 @@ $(document).ready(function () {
   // Listen to update button in customer details tab
   $('#updateCustomerDetailsButton').on('click', function () {
     updateCustomer();
+  });
+
+  // Listen to update button in vendor details tab
+  $('#updateVendorDetailsButton').on('click', function () {
+    updateVendor();
   });
 
   // Listen to update button in purchase details tab
@@ -148,6 +180,16 @@ $(document).ready(function () {
     bootbox.confirm('Are you sure you want to delete?', function (result) {
       if (result) {
         deleteCustomer();
+      }
+    });
+  });
+
+  // Listen to delete button in vendor details tab
+  $('#deleteVendorButton').on('click', function () {
+    // Confirm before deleting
+    bootbox.confirm('Are you sure you want to delete?', function (result) {
+      if (result) {
+        deleteVendor();
       }
     });
   });
@@ -339,6 +381,27 @@ $(document).ready(function () {
     }
   );
 
+  // Listen to VendorID text box in vendor details tab
+  $('#vendorDetailsVendorID').keyup(function () {
+    showSuggestions(
+      'vendorDetailsVendorID',
+      showVendorIDSuggestionsFile,
+      'vendorDetailsVendorIDSuggestionsDiv'
+    );
+  });
+
+  // Remove the VendorID suggestions dropdown in the vendor details tab
+  // when user selects an item from it
+  $(document).on(
+    'click',
+    '#vendorDetailsVendorIDSuggestionsList li',
+    function () {
+      $('#vendorDetailsVendorID').val($(this).text());
+      $('#vendorDetailsVendorIDSuggestionsList').fadeOut();
+      getVendorDetailsToPopulate();
+    }
+  );
+
   // Listen to PurchaseID text box in purchase details tab
   $('#purchaseDetailsPurchaseID').keyup(function () {
     showSuggestions(
@@ -412,7 +475,7 @@ $(document).ready(function () {
     $('.suggestionsList').fadeOut();
   });
 
-  // Load searchable datatables for customer, purchase, item, sale
+  // Load searchable datatables for customer, purchase, item, vendor, sale
   searchTableCreator(
     'itemDetailsTableDiv',
     itemDetailsSearchTableCreatorFile,
@@ -433,8 +496,13 @@ $(document).ready(function () {
     saleDetailsSearchTableCreatorFile,
     'saleDetailsTable'
   );
+  searchTableCreator(
+    'vendorDetailsTableDiv',
+    vendorDetailsSearchTableCreatorFile,
+    'vendorDetailsTable'
+  );
 
-  // Load searchable datatables for customer, purchase, item, sale reports
+  // Load searchable datatables for customer, purchase, item, vendor, sale reports
   reportsTableCreator(
     'itemReportsTableDiv',
     itemReportsSearchTableCreatorFile,
@@ -454,6 +522,11 @@ $(document).ready(function () {
     'saleReportsTableDiv',
     saleReportsSearchTableCreatorFile,
     'saleReportsTable'
+  );
+  reportsTableCreator(
+    'vendorReportsTableDiv',
+    vendorReportsSearchTableCreatorFile,
+    'vendorReportsTable'
   );
 
   // Initiate popovers
@@ -1120,6 +1193,55 @@ function addCustomer() {
         customerReportsSearchTableCreatorFile,
         'customerReportsTable'
       );
+    },
+  });
+}
+
+// Function to call the insertVendor.php script to insert vendor data to db
+function addVendor() {
+  var vendorDetailsVendorFullName = $('#vendorDetailsVendorFullName').val();
+  var vendorDetailsVendorEmail = $('#vendorDetailsVendorEmail').val();
+  var vendorDetailsVendorMobile = $('#vendorDetailsVendorMobile').val();
+  var vendorDetailsVendorPhone2 = $('#vendorDetailsVendorPhone2').val();
+  var vendorDetailsVendorAddress = $('#vendorDetailsVendorAddress').val();
+  var vendorDetailsVendorAddress2 = $('#vendorDetailsVendorAddress2').val();
+  var vendorDetailsVendorCity = $('#vendorDetailsVendorCity').val();
+  var vendorDetailsVendorDistrict = $(
+    '#vendorDetailsVendorDistrict option:selected'
+  ).text();
+  var vendorDetailsStatus = $('#vendorDetailsStatus option:selected').text();
+
+  $.ajax({
+    url: 'model/vendor/insertVendor.php',
+    method: 'POST',
+    data: {
+      vendorDetailsVendorFullName: vendorDetailsVendorFullName,
+      vendorDetailsVendorEmail: vendorDetailsVendorEmail,
+      vendorDetailsVendorMobile: vendorDetailsVendorMobile,
+      vendorDetailsVendorPhone2: vendorDetailsVendorPhone2,
+      vendorDetailsVendorAddress: vendorDetailsVendorAddress,
+      vendorDetailsVendorAddress2: vendorDetailsVendorAddress2,
+      vendorDetailsVendorCity: vendorDetailsVendorCity,
+      vendorDetailsVendorDistrict: vendorDetailsVendorDistrict,
+      vendorDetailsStatus: vendorDetailsStatus,
+    },
+    success: function (data) {
+      $('#vendorDetailsMessage').fadeIn();
+      $('#vendorDetailsMessage').html(data);
+    },
+    complete: function (data) {
+      populateLastInsertedID(vendorLastInsertedIDFile, 'vendorDetailsVendorID');
+      searchTableCreator(
+        'vendorDetailsTableDiv',
+        vendorDetailsSearchTableCreatorFile,
+        'vendorDetailsTable'
+      );
+      reportsTableCreator(
+        'vendorReportsTableDiv',
+        vendorReportsSearchTableCreatorFile,
+        'vendorReportsTable'
+      );
+      $('#purchaseDetailsVendorName').load('model/vendor/getVendorNames.php');
     },
   });
 }

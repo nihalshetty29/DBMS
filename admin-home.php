@@ -66,14 +66,24 @@ require_once('inc/header.html');
                           <input type="text" class="form-control" name="itemDetailsItemName" id="itemDetailsItemName" autocomplete="off">
                           <div id="itemDetailsItemNameSuggestionsDiv" class="customListDivWidth"></div>
                         </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-group col-md-6" style="display:inline-block">
-                          <!-- <label for="itemDetailsDescription">Description</label> -->
-                          <textarea rows="4" class="form-control" placeholder="Description" name="itemDetailsDescription" id="itemDetailsDescription"></textarea>
+                        <div class="form-group col-md-2">
+                          <label for="itemDetailsStatus">Status</label>
+                          <select id="itemDetailsStatus" name="itemDetailsStatus" class="form-control chosenSelect">
+                            <?php include('inc/statusList.html'); ?>
+                          </select>
                         </div>
                       </div>
                       <div class="form-row">
+                        <div class="form-group col-md-6" style="display:inline-block">
+                          <label for="itemDetailsDescription">Description</label>
+                          <textarea rows="4" class="form-control" name="itemDetailsDescription" id="itemDetailsDescription"></textarea>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-3">
+                          <label for="itemDetailsDiscount">Discount %</label>
+                          <input type="text" class="form-control" value="0" name="itemDetailsDiscount" id="itemDetailsDiscount">
+                        </div>
                         <div class="form-group col-md-3">
                           <label for="itemDetailsQuantity">Quantity<span class="requiredIcon">*</span></label>
                           <input type="number" class="form-control" value="0" name="itemDetailsQuantity" id="itemDetailsQuantity">
