@@ -9,7 +9,7 @@ const login = () => {
   var loginPassword = $('#loginPassword').val();
 
   $.ajax({
-    url: 'model/login/checkLogin.php',
+    url: 'model/admin-login/check-login.php',
     method: 'POST',
     data: {
       loginUsername: loginUsername,

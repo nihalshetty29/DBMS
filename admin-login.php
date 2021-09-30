@@ -17,7 +17,7 @@ require_once('inc/header.html');
       <div class="col-sm-12 col-md-5 col-lg-5">
         <div class="card">
           <div class="card-header">
-            Login
+            Admin Login
           </div>
           <div class="card-body">
             <form action="">
