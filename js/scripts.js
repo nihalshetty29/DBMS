@@ -1,11 +1,3 @@
-document.getElementById('customer-login').addEventListener('click', () => {
-  document.location.href = 'customer-login.php';
-});
-
-document.getElementById('admin-login').addEventListener('click', () => {
-  document.location.href = 'admin-login.php';
-});
-
 // File that creates the purchase details search table
 purchaseDetailsSearchTableCreatorFile =
   'model/purchase/purchaseDetailsSearchTableCreator.php';
@@ -21,6 +13,14 @@ itemDetailsSearchTableCreatorFile =
 // File that creates the sale details search table
 saleDetailsSearchTableCreatorFile =
   'model/sale/saleDetailsSearchTableCreator.php';
+
+// File that creates the purchase reports search table
+purchaseReportsSearchTableCreatorFile =
+  'model/purchase/purchaseReportsSearchTableCreator.php';
+
+// File that creates the customer reports search table
+customerReportsSearchTableCreatorFile =
+  'model/customer/customerReportsSearchTableCreator.php';
 
 // File that returns the last inserted customerID
 customerLastInsertedIDFile = 'model/customer/populateLastCustomerID.php';
@@ -40,9 +40,6 @@ showPurchaseIDSuggestionsFile = 'model/purchase/showPurchaseIDs.php';
 
 // File that returns saleIDs
 showSaleIDSuggestionsFile = 'model/sale/showSaleIDs.php';
-
-// File that returns vendorIDs
-showVendorIDSuggestionsFile = 'model/vendor/showVendorIDs.php';
 
 // File that returns customerIDs
 showCustomerIDSuggestionsFile = 'model/customer/showCustomerIDs.php';
@@ -80,6 +77,13 @@ updateImageFile = 'model/image/updateImage.php';
 // File that deletes an image
 deleteImageFile = 'model/image/deleteImage.php';
 
+// File that creates the filtered purchase report table
+purchaseFilteredReportCreatorFile =
+  'model/purchase/purchaseFilteredReportTableCreator.php';
+
+// File that creates the filtered sale report table
+saleFilteredReportCreatorFile = 'model/sale/saleFilteredReportTableCreator.php';
+
 $(document).ready(function () {
   // Style the dropdown boxes. You need to explicitly set the width
   // in order to fix the dropdown box not visible issue when tab is hidden
@@ -98,6 +102,11 @@ $(document).ready(function () {
     addItem();
   });
 
+  // Listen to purchase add button
+  $('#addPurchase').on('click', function () {
+    addPurchase();
+  });
+
   // Listen to sale add button
   $('#addSaleButton').on('click', function () {
     addSale();
@@ -111,6 +120,11 @@ $(document).ready(function () {
   // Listen to update button in customer details tab
   $('#updateCustomerDetailsButton').on('click', function () {
     updateCustomer();
+  });
+
+  // Listen to update button in purchase details tab
+  $('#updatePurchaseDetailsButton').on('click', function () {
+    updatePurchase();
   });
 
   // Listen to update button in sale details tab
@@ -231,6 +245,24 @@ $(document).ready(function () {
     $('#saleDetailsImageContainer').empty();
   });
 
+  // Refresh the purchase report datatable in the purchase report tab when Clear button is clicked
+  $('#purchaseFilterClear').on('click', function () {
+    reportsPurchaseTableCreator(
+      'purchaseReportsTableDiv',
+      purchaseReportsSearchTableCreatorFile,
+      'purchaseReportsTable'
+    );
+  });
+
+  // Refresh the sale report datatable in the sale report tab when Clear button is clicked
+  $('#saleFilterClear').on('click', function () {
+    reportsSaleTableCreator(
+      'saleReportsTableDiv',
+      saleReportsSearchTableCreatorFile,
+      'saleReportsTable'
+    );
+  });
+
   // Listen to item number text box in purchase details tab
   $('#purchaseDetailsItemNumber').keyup(function () {
     showSuggestions(
@@ -316,6 +348,18 @@ $(document).ready(function () {
     );
   });
 
+  // Remove the PurchaseID suggestions dropdown in the customer details tab
+  // when user selects an item from it
+  $(document).on(
+    'click',
+    '#purchaseDetailsPurchaseIDSuggestionsList li',
+    function () {
+      $('#purchaseDetailsPurchaseID').val($(this).text());
+      $('#purchaseDetailsPurchaseIDSuggestionsList').fadeOut();
+      getPurchaseDetailsToPopulate();
+    }
+  );
+
   // Listen to saleID text box in sale details tab
   $('#saleDetailsSaleID').keyup(function () {
     showSuggestions(
@@ -368,11 +412,16 @@ $(document).ready(function () {
     $('.suggestionsList').fadeOut();
   });
 
-  // Load searchable datatables for customer, purchase, item, vendor, sale
+  // Load searchable datatables for customer, purchase, item, sale
   searchTableCreator(
     'itemDetailsTableDiv',
     itemDetailsSearchTableCreatorFile,
     'itemDetailsTable'
+  );
+  searchTableCreator(
+    'purchaseDetailsTableDiv',
+    purchaseDetailsSearchTableCreatorFile,
+    'purchaseDetailsTable'
   );
   searchTableCreator(
     'customerDetailsTableDiv',
@@ -383,6 +432,28 @@ $(document).ready(function () {
     'saleDetailsTableDiv',
     saleDetailsSearchTableCreatorFile,
     'saleDetailsTable'
+  );
+
+  // Load searchable datatables for customer, purchase, item, sale reports
+  reportsTableCreator(
+    'itemReportsTableDiv',
+    itemReportsSearchTableCreatorFile,
+    'itemReportsTable'
+  );
+  reportsPurchaseTableCreator(
+    'purchaseReportsTableDiv',
+    purchaseReportsSearchTableCreatorFile,
+    'purchaseReportsTable'
+  );
+  reportsTableCreator(
+    'customerReportsTableDiv',
+    customerReportsSearchTableCreatorFile,
+    'customerReportsTable'
+  );
+  reportsSaleTableCreator(
+    'saleReportsTableDiv',
+    saleReportsSearchTableCreatorFile,
+    'saleReportsTable'
   );
 
   // Initiate popovers
@@ -399,11 +470,16 @@ $(document).ready(function () {
   });
 
   // Listen to refresh buttons
-  $('#searchTablesRefresh').on('click', function () {
+  $('#searchTablesRefresh, #reportsTablesRefresh').on('click', function () {
     searchTableCreator(
       'itemDetailsTableDiv',
       itemDetailsSearchTableCreatorFile,
       'itemDetailsTable'
+    );
+    searchTableCreator(
+      'purchaseDetailsTableDiv',
+      purchaseDetailsSearchTableCreatorFile,
+      'purchaseDetailsTable'
     );
     searchTableCreator(
       'customerDetailsTableDiv',
@@ -411,9 +487,62 @@ $(document).ready(function () {
       'customerDetailsTable'
     );
     searchTableCreator(
+      'vendorDetailsTableDiv',
+      vendorDetailsSearchTableCreatorFile,
+      'vendorDetailsTable'
+    );
+    searchTableCreator(
       'saleDetailsTableDiv',
       saleDetailsSearchTableCreatorFile,
       'saleDetailsTable'
+    );
+
+    reportsTableCreator(
+      'itemReportsTableDiv',
+      itemReportsSearchTableCreatorFile,
+      'itemReportsTable'
+    );
+    reportsPurchaseTableCreator(
+      'purchaseReportsTableDiv',
+      purchaseReportsSearchTableCreatorFile,
+      'purchaseReportsTable'
+    );
+    reportsTableCreator(
+      'customerReportsTableDiv',
+      customerReportsSearchTableCreatorFile,
+      'customerReportsTable'
+    );
+    reportsTableCreator(
+      'vendorReportsTableDiv',
+      vendorReportsSearchTableCreatorFile,
+      'vendorReportsTable'
+    );
+    reportsSaleTableCreator(
+      'saleReportsTableDiv',
+      saleReportsSearchTableCreatorFile,
+      'saleReportsTable'
+    );
+  });
+
+  // Listen to purchase report show button
+  $('#showPurchaseReport').on('click', function () {
+    filteredPurchaseReportTableCreator(
+      'purchaseReportStartDate',
+      'purchaseReportEndDate',
+      purchaseFilteredReportCreatorFile,
+      'purchaseReportsTableDiv',
+      'purchaseFilteredReportsTable'
+    );
+  });
+
+  // Listen to sale report show button
+  $('#showSaleReport').on('click', function () {
+    filteredSaleReportTableCreator(
+      'saleReportStartDate',
+      'saleReportEndDate',
+      saleFilteredReportCreatorFile,
+      'saleReportsTableDiv',
+      'saleFilteredReportsTable'
     );
   });
 });
@@ -462,6 +591,468 @@ function searchTableCreator(tableContainerDiv, tableCreatorFileUrl, table) {
   });
 }
 
+// Function to create reports datatables for customer, item, purchase, sale
+function reportsTableCreator(tableContainerDiv, tableCreatorFileUrl, table) {
+  var tableContainerDivID = '#' + tableContainerDiv;
+  var tableID = '#' + table;
+  $(tableContainerDivID).load(tableCreatorFileUrl, function () {
+    // Initiate the Datatable plugin once the table is added to the DOM
+    $(tableID).DataTable({
+      dom: 'lBfrtip',
+      //dom: 'lfBrtip',
+      //dom: 'Bfrtip',
+      buttons: [
+        'copy',
+        'csv',
+        'excel',
+        { extend: 'pdf', orientation: 'landscape', pageSize: 'LEGAL' },
+        'print',
+      ],
+    });
+  });
+}
+
+// Function to create reports datatables for purchase
+function reportsPurchaseTableCreator(
+  tableContainerDiv,
+  tableCreatorFileUrl,
+  table
+) {
+  var tableContainerDivID = '#' + tableContainerDiv;
+  var tableID = '#' + table;
+  $(tableContainerDivID).load(tableCreatorFileUrl, function () {
+    // Initiate the Datatable plugin once the table is added to the DOM
+    $(tableID).DataTable({
+      dom: 'lBfrtip',
+      buttons: [
+        'copy',
+        { extend: 'csv', footer: true, title: 'Purchase Report' },
+        { extend: 'excel', footer: true, title: 'Purchase Report' },
+        {
+          extend: 'pdf',
+          footer: true,
+          orientation: 'landscape',
+          pageSize: 'LEGAL',
+          title: 'Purchase Report',
+        },
+        { extend: 'print', footer: true, title: 'Purchase Report' },
+      ],
+      footerCallback: function (row, data, start, end, display) {
+        var api = this.api(),
+          data;
+
+        // Remove the formatting to get integer data for summation
+        var intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+            ? i
+            : 0;
+        };
+
+        // Quantity total over all pages
+        quantityTotal = api
+          .column(6)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Quantity for current page
+        quantityFilteredTotal = api
+          .column(6, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Unit price total over all pages
+        unitPriceTotal = api
+          .column(7)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Unit price for current page
+        unitPriceFilteredTotal = api
+          .column(7, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Full price total over all pages
+        fullPriceTotal = api
+          .column(8)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Full price for current page
+        fullPriceFilteredTotal = api
+          .column(8, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Update footer columns
+        $(api.column(6).footer()).html(
+          quantityFilteredTotal + ' (' + quantityTotal + ' total)'
+        );
+        $(api.column(7).footer()).html(
+          unitPriceFilteredTotal + ' (' + unitPriceTotal + ' total)'
+        );
+        $(api.column(8).footer()).html(
+          fullPriceFilteredTotal + ' (' + fullPriceTotal + ' total)'
+        );
+      },
+    });
+  });
+}
+
+// Function to create reports datatables for sale
+function reportsSaleTableCreator(
+  tableContainerDiv,
+  tableCreatorFileUrl,
+  table
+) {
+  var tableContainerDivID = '#' + tableContainerDiv;
+  var tableID = '#' + table;
+  $(tableContainerDivID).load(tableCreatorFileUrl, function () {
+    // Initiate the Datatable plugin once the table is added to the DOM
+    $(tableID).DataTable({
+      dom: 'lBfrtip',
+      buttons: [
+        'copy',
+        { extend: 'csv', footer: true, title: 'Sale Report' },
+        { extend: 'excel', footer: true, title: 'Sale Report' },
+        {
+          extend: 'pdf',
+          footer: true,
+          orientation: 'landscape',
+          pageSize: 'LEGAL',
+          title: 'Sale Report',
+        },
+        { extend: 'print', footer: true, title: 'Sale Report' },
+      ],
+      footerCallback: function (row, data, start, end, display) {
+        var api = this.api(),
+          data;
+
+        // Remove the formatting to get integer data for summation
+        var intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+            ? i
+            : 0;
+        };
+
+        // Quantity Total over all pages
+        quantityTotal = api
+          .column(7)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Quantity Total over this page
+        quantityFilteredTotal = api
+          .column(7, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Unit price Total over all pages
+        unitPriceTotal = api
+          .column(8)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Unit price total over current page
+        unitPriceFilteredTotal = api
+          .column(8, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Full price Total over all pages
+        fullPriceTotal = api
+          .column(9)
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Full price total over current page
+        fullPriceFilteredTotal = api
+          .column(9, { page: 'current' })
+          .data()
+          .reduce(function (a, b) {
+            return intVal(a) + intVal(b);
+          }, 0);
+
+        // Update footer columns
+        $(api.column(7).footer()).html(
+          quantityFilteredTotal + ' (' + quantityTotal + ' total)'
+        );
+        $(api.column(8).footer()).html(
+          unitPriceFilteredTotal + ' (' + unitPriceTotal + ' total)'
+        );
+        $(api.column(9).footer()).html(
+          fullPriceFilteredTotal + ' (' + fullPriceTotal + ' total)'
+        );
+      },
+    });
+  });
+}
+
+// Function to create filtered datatable for sale details with total values
+function filteredSaleReportTableCreator(
+  startDate,
+  endDate,
+  scriptPath,
+  tableDIV,
+  tableID
+) {
+  var startDate = $('#' + startDate).val();
+  var endDate = $('#' + endDate).val();
+
+  $.ajax({
+    url: scriptPath,
+    method: 'POST',
+    data: {
+      startDate: startDate,
+      endDate: endDate,
+    },
+    success: function (data) {
+      $('#' + tableDIV).empty();
+      $('#' + tableDIV).html(data);
+    },
+    complete: function () {
+      // Initiate the Datatable plugin once the table is added to the DOM
+      $('#' + tableID).DataTable({
+        dom: 'lBfrtip',
+        buttons: [
+          'copy',
+          { extend: 'csv', footer: true, title: 'Sale Report' },
+          { extend: 'excel', footer: true, title: 'Sale Report' },
+          {
+            extend: 'pdf',
+            footer: true,
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            title: 'Sale Report',
+          },
+          { extend: 'print', footer: true, title: 'Sale Report' },
+        ],
+        footerCallback: function (row, data, start, end, display) {
+          var api = this.api(),
+            data;
+
+          // Remove the formatting to get integer data for summation
+          var intVal = function (i) {
+            return typeof i === 'string'
+              ? i.replace(/[\$,]/g, '') * 1
+              : typeof i === 'number'
+              ? i
+              : 0;
+          };
+
+          // Total over all pages
+          quantityTotal = api
+            .column(7)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Total over this page
+          quantityFilteredTotal = api
+            .column(7, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Total over all pages
+          unitPriceTotal = api
+            .column(8)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Quantity total
+          unitPriceFilteredTotal = api
+            .column(8, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Full total over all pages
+          fullPriceTotal = api
+            .column(9)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Full total over current page
+          fullPriceFilteredTotal = api
+            .column(9, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Update footer columns
+          $(api.column(7).footer()).html(
+            quantityFilteredTotal + ' (' + quantityTotal + ' total)'
+          );
+          $(api.column(8).footer()).html(
+            unitPriceFilteredTotal + ' (' + unitPriceTotal + ' total)'
+          );
+          $(api.column(9).footer()).html(
+            fullPriceFilteredTotal + ' (' + fullPriceTotal + ' total)'
+          );
+        },
+      });
+    },
+  });
+}
+
+// Function to create filtered datatable for purchase details with total values
+function filteredPurchaseReportTableCreator(
+  startDate,
+  endDate,
+  scriptPath,
+  tableDIV,
+  tableID
+) {
+  var startDate = $('#' + startDate).val();
+  var endDate = $('#' + endDate).val();
+
+  $.ajax({
+    url: scriptPath,
+    method: 'POST',
+    data: {
+      startDate: startDate,
+      endDate: endDate,
+    },
+    success: function (data) {
+      $('#' + tableDIV).empty();
+      $('#' + tableDIV).html(data);
+    },
+    complete: function () {
+      // Initiate the Datatable plugin once the table is added to the DOM
+      $('#' + tableID).DataTable({
+        dom: 'lBfrtip',
+        buttons: [
+          'copy',
+          { extend: 'csv', footer: true, title: 'Purchase Report' },
+          { extend: 'excel', footer: true, title: 'Purchase Report' },
+          {
+            extend: 'pdf',
+            footer: true,
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            title: 'Purchase Report',
+          },
+          { extend: 'print', footer: true, title: 'Purchase Report' },
+        ],
+        footerCallback: function (row, data, start, end, display) {
+          var api = this.api(),
+            data;
+
+          // Remove the formatting to get integer data for summation
+          var intVal = function (i) {
+            return typeof i === 'string'
+              ? i.replace(/[\$,]/g, '') * 1
+              : typeof i === 'number'
+              ? i
+              : 0;
+          };
+
+          // Quantity total over all pages
+          quantityTotal = api
+            .column(6)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Quantity for current page
+          quantityFilteredTotal = api
+            .column(6, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Unit price total over all pages
+          unitPriceTotal = api
+            .column(7)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Unit price for current page
+          unitPriceFilteredTotal = api
+            .column(7, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Full price total over all pages
+          fullPriceTotal = api
+            .column(8)
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Full price for current page
+          fullPriceFilteredTotal = api
+            .column(8, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            }, 0);
+
+          // Update footer columns
+          $(api.column(6).footer()).html(
+            quantityFilteredTotal + ' (' + quantityTotal + ' total)'
+          );
+          $(api.column(7).footer()).html(
+            unitPriceFilteredTotal + ' (' + unitPriceTotal + ' total)'
+          );
+          $(api.column(8).footer()).html(
+            fullPriceFilteredTotal + ' (' + fullPriceTotal + ' total)'
+          );
+        },
+      });
+    },
+  });
+}
+
+// Calculate Total Purchase value in purchase details tab
+function calculateTotalInPurchaseTab() {
+  var quantityPT = $('#purchaseDetailsQuantity').val();
+  var unitPricePT = $('#purchaseDetailsUnitPrice').val();
+  $('#purchaseDetailsTotal').val(Number(quantityPT) * Number(unitPricePT));
+}
+
 // Calculate Total sale value in sale details tab
 function calculateTotalInSaleTab() {
   var quantityST = $('#saleDetailsQuantity').val();
@@ -473,7 +1064,6 @@ function calculateTotalInSaleTab() {
       Number(quantityST)
   );
 }
-s;
 
 // Function to call the insertCustomer.php script to insert customer data to db
 function addCustomer() {
@@ -566,6 +1156,64 @@ function addItem() {
         'itemDetailsItemNumber',
         getItemStockFile,
         itemDetailsTotalStock
+      );
+      searchTableCreator(
+        'itemDetailsTableDiv',
+        itemDetailsSearchTableCreatorFile,
+        'itemDetailsTable'
+      );
+      reportsTableCreator(
+        'itemReportsTableDiv',
+        itemReportsSearchTableCreatorFile,
+        'itemReportsTable'
+      );
+    },
+  });
+}
+
+// Function to call the insertPurchase.php script to insert purchase data to db
+function addPurchase() {
+  var purchaseDetailsItemNumber = $('#purchaseDetailsItemNumber').val();
+  var purchaseDetailsPurchaseDate = $('#purchaseDetailsPurchaseDate').val();
+  var purchaseDetailsItemName = $('#purchaseDetailsItemName').val();
+  var purchaseDetailsQuantity = $('#purchaseDetailsQuantity').val();
+  var purchaseDetailsUnitPrice = $('#purchaseDetailsUnitPrice').val();
+  var purchaseDetailsVendorName = $('#purchaseDetailsVendorName').val();
+
+  $.ajax({
+    url: 'model/purchase/insertPurchase.php',
+    method: 'POST',
+    data: {
+      purchaseDetailsItemNumber: purchaseDetailsItemNumber,
+      purchaseDetailsPurchaseDate: purchaseDetailsPurchaseDate,
+      purchaseDetailsItemName: purchaseDetailsItemName,
+      purchaseDetailsQuantity: purchaseDetailsQuantity,
+      purchaseDetailsUnitPrice: purchaseDetailsUnitPrice,
+      purchaseDetailsVendorName: purchaseDetailsVendorName,
+    },
+    success: function (data) {
+      $('#purchaseDetailsMessage').fadeIn();
+      $('#purchaseDetailsMessage').html(data);
+    },
+    complete: function () {
+      getItemStockToPopulate(
+        'purchaseDetailsItemNumber',
+        getItemStockFile,
+        'purchaseDetailsCurrentStock'
+      );
+      populateLastInsertedID(
+        purchaseLastInsertedIDFile,
+        'purchaseDetailsPurchaseID'
+      );
+      searchTableCreator(
+        'purchaseDetailsTableDiv',
+        purchaseDetailsSearchTableCreatorFile,
+        'purchaseDetailsTable'
+      );
+      reportsPurchaseTableCreator(
+        'purchaseReportsTableDiv',
+        purchaseReportsSearchTableCreatorFile,
+        'purchaseReportsTable'
       );
       searchTableCreator(
         'itemDetailsTableDiv',
@@ -857,6 +1505,38 @@ function deleteCustomer() {
   }
 }
 
+// Function to delete vendor from db
+function deleteVendor() {
+  // Get the vendorID entered by the user
+  var vendorDetailsVendorID = $('#vendorDetailsVendorID').val();
+
+  // Call the deleteVendor.php script only if there is a value in the
+  // vendor ID textbox
+  if (vendorDetailsVendorID != '') {
+    $.ajax({
+      url: 'model/vendor/deleteVendor.php',
+      method: 'POST',
+      data: { vendorDetailsVendorID: vendorDetailsVendorID },
+      success: function (data) {
+        $('#vendorDetailsMessage').fadeIn();
+        $('#vendorDetailsMessage').html(data);
+      },
+      complete: function () {
+        searchTableCreator(
+          'vendorDetailsTableDiv',
+          vendorDetailsSearchTableCreatorFile,
+          'vendorDetailsTable'
+        );
+        reportsTableCreator(
+          'vendorReportsTableDiv',
+          vendorReportsSearchTableCreatorFile,
+          'vendorReportsTable'
+        );
+      },
+    });
+  }
+}
+
 // Function to send customerID so that customer details can be pulled from db
 // to be displayed on customer details tab
 function getCustomerDetailsToPopulate() {
@@ -903,6 +1583,36 @@ function getCustomerDetailsToPopulateSaleTab() {
     success: function (data) {
       //$('#saleDetailsCustomerID').val(data.customerID);
       $('#saleDetailsCustomerName').val(data.fullName);
+    },
+  });
+}
+
+// Function to send vendorID so that vendor details can be pulled from db
+// to be displayed on vendor details tab
+function getVendorDetailsToPopulate() {
+  // Get the vendorID entered in the text box
+  var vendorDetailsVendorID = $('#vendorDetailsVendorID').val();
+
+  // Call the populateVendorDetails.php script to get vendor details
+  // relevant to the vendorID which the user entered
+  $.ajax({
+    url: 'model/vendor/populateVendorDetails.php',
+    method: 'POST',
+    data: { vendorDetailsVendorID: vendorDetailsVendorID },
+    dataType: 'json',
+    success: function (data) {
+      //$('#vendorDetailsVendorID').val(data.vendorID);
+      $('#vendorDetailsVendorFullName').val(data.fullName);
+      $('#vendorDetailsVendorMobile').val(data.mobile);
+      $('#vendorDetailsVendorPhone2').val(data.phone2);
+      $('#vendorDetailsVendorEmail').val(data.email);
+      $('#vendorDetailsVendorAddress').val(data.address);
+      $('#vendorDetailsVendorAddress2').val(data.address2);
+      $('#vendorDetailsVendorCity').val(data.city);
+      $('#vendorDetailsVendorDistrict')
+        .val(data.district)
+        .trigger('chosen:updated');
+      $('#vendorDetailsStatus').val(data.status).trigger('chosen:updated');
     },
   });
 }
@@ -1109,6 +1819,119 @@ function updateCustomer() {
   });
 }
 
+// Function to call the upateVendorDetails.php script to UPDATE vendor data in db
+function updateVendor() {
+  var vendorDetailsVendorID = $('#vendorDetailsVendorID').val();
+  var vendorDetailsVendorFullName = $('#vendorDetailsVendorFullName').val();
+  var vendorDetailsVendorMobile = $('#vendorDetailsVendorMobile').val();
+  var vendorDetailsVendorPhone2 = $('#vendorDetailsVendorPhone2').val();
+  var vendorDetailsVendorAddress = $('#vendorDetailsVendorAddress').val();
+  var vendorDetailsVendorEmail = $('#vendorDetailsVendorEmail').val();
+  var vendorDetailsVendorAddress2 = $('#vendorDetailsVendorAddress2').val();
+  var vendorDetailsVendorCity = $('#vendorDetailsVendorCity').val();
+  var vendorDetailsVendorDistrict = $('#vendorDetailsVendorDistrict').val();
+  var vendorDetailsStatus = $('#vendorDetailsStatus option:selected').text();
+
+  $.ajax({
+    url: 'model/vendor/updateVendorDetails.php',
+    method: 'POST',
+    data: {
+      vendorDetailsVendorID: vendorDetailsVendorID,
+      vendorDetailsVendorFullName: vendorDetailsVendorFullName,
+      vendorDetailsVendorMobile: vendorDetailsVendorMobile,
+      vendorDetailsVendorPhone2: vendorDetailsVendorPhone2,
+      vendorDetailsVendorAddress: vendorDetailsVendorAddress,
+      vendorDetailsVendorEmail: vendorDetailsVendorEmail,
+      vendorDetailsVendorAddress2: vendorDetailsVendorAddress2,
+      vendorDetailsVendorCity: vendorDetailsVendorCity,
+      vendorDetailsVendorDistrict: vendorDetailsVendorDistrict,
+      vendorDetailsStatus: vendorDetailsStatus,
+    },
+    success: function (data) {
+      $('#vendorDetailsMessage').fadeIn();
+      $('#vendorDetailsMessage').html(data);
+    },
+    complete: function () {
+      searchTableCreator(
+        'purchaseDetailsTableDiv',
+        purchaseDetailsSearchTableCreatorFile,
+        'purchaseDetailsTable'
+      );
+      searchTableCreator(
+        'vendorDetailsTableDiv',
+        vendorDetailsSearchTableCreatorFile,
+        'vendorDetailsTable'
+      );
+      reportsPurchaseTableCreator(
+        'purchaseReportsTableDiv',
+        purchaseReportsSearchTableCreatorFile,
+        'purchaseReportsTable'
+      );
+      reportsTableCreator(
+        'vendorReportsTableDiv',
+        vendorReportsSearchTableCreatorFile,
+        'vendorReportsTable'
+      );
+    },
+  });
+}
+
+// Function to call the updatePurchase.php script to update purchase data to db
+function updatePurchase() {
+  var purchaseDetailsItemNumber = $('#purchaseDetailsItemNumber').val();
+  var purchaseDetailsPurchaseDate = $('#purchaseDetailsPurchaseDate').val();
+  var purchaseDetailsItemName = $('#purchaseDetailsItemName').val();
+  var purchaseDetailsQuantity = $('#purchaseDetailsQuantity').val();
+  var purchaseDetailsUnitPrice = $('#purchaseDetailsUnitPrice').val();
+  var purchaseDetailsPurchaseID = $('#purchaseDetailsPurchaseID').val();
+  var purchaseDetailsVendorName = $('#purchaseDetailsVendorName').val();
+
+  $.ajax({
+    url: 'model/purchase/updatePurchase.php',
+    method: 'POST',
+    data: {
+      purchaseDetailsItemNumber: purchaseDetailsItemNumber,
+      purchaseDetailsPurchaseDate: purchaseDetailsPurchaseDate,
+      purchaseDetailsItemName: purchaseDetailsItemName,
+      purchaseDetailsQuantity: purchaseDetailsQuantity,
+      purchaseDetailsUnitPrice: purchaseDetailsUnitPrice,
+      purchaseDetailsPurchaseID: purchaseDetailsPurchaseID,
+      purchaseDetailsVendorName: purchaseDetailsVendorName,
+    },
+    success: function (data) {
+      $('#purchaseDetailsMessage').fadeIn();
+      $('#purchaseDetailsMessage').html(data);
+    },
+    complete: function () {
+      getItemStockToPopulate(
+        'purchaseDetailsItemNumber',
+        getItemStockFile,
+        'purchaseDetailsCurrentStock'
+      );
+      searchTableCreator(
+        'purchaseDetailsTableDiv',
+        purchaseDetailsSearchTableCreatorFile,
+        'purchaseDetailsTable'
+      );
+      reportsPurchaseTableCreator(
+        'purchaseReportsTableDiv',
+        purchaseReportsSearchTableCreatorFile,
+        'purchaseReportsTable'
+      );
+      searchTableCreator(
+        'itemDetailsTableDiv',
+        itemDetailsSearchTableCreatorFile,
+        'itemDetailsTable'
+      );
+      reportsTableCreator(
+        'itemReportsTableDiv',
+        itemReportsSearchTableCreatorFile,
+        'itemReportsTable'
+      );
+    },
+  });
+}
+
 // Function to call the updateSale.php script to update sale data to db
 function updateSale() {
   var saleDetailsItemNumber = $('#saleDetailsItemNumber').val();
@@ -1150,10 +1973,20 @@ function updateSale() {
         saleDetailsSearchTableCreatorFile,
         'saleDetailsTable'
       );
+      reportsSaleTableCreator(
+        'saleReportsTableDiv',
+        saleReportsSearchTableCreatorFile,
+        'saleReportsTable'
+      );
       searchTableCreator(
         'itemDetailsTableDiv',
         itemDetailsSearchTableCreatorFile,
         'itemDetailsTable'
+      );
+      reportsTableCreator(
+        'itemReportsTableDiv',
+        itemReportsSearchTableCreatorFile,
+        'itemReportsTable'
       );
     },
   });

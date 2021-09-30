@@ -41,7 +41,7 @@ VALUES
     '21232f297a57a5a743894a0e4a801fc3'
   );
 
-CREATE TABLE `customers` (
+CREATE TABLE `customer` (
   `customerID` int(11) NOT NULL,
   `fullName` varchar(100) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE `customers` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO
-  `customers` (
+  `customer` (
     `customerID`,
     `fullName`,
     `email`,
@@ -202,7 +202,7 @@ VALUES
     '2018-05-13 02:39:41'
   );
 
-CREATE TABLE `items` (
+CREATE TABLE `item` (
   `productID` int(11) NOT NULL,
   `itemNumber` varchar(255) NOT NULL,
   `itemName` varchar(255) NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE `items` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO
-  `items` (
+  `item` (
     `productID`,
     `itemNumber`,
     `itemName`,
@@ -323,7 +323,7 @@ VALUES
     'This is a hiking bag. Ideal for long distance hikes. Light-weight and water proof.'
   );
 
-CREATE TABLE `orders` (
+CREATE TABLE `sale` (
   `saleID` int(11) NOT NULL,
   `itemNumber` varchar(255) NOT NULL,
   `customerID` int(11) NOT NULL,
@@ -336,7 +336,7 @@ CREATE TABLE `orders` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO
-  `orders` (
+  `sale` (
     `saleID`,
     `itemNumber`,
     `customerID`,
@@ -537,34 +537,34 @@ MODIFY
   AUTO_INCREMENT = 8;
 
 ALTER TABLE
-  `items`
+  `item`
 ADD
   PRIMARY KEY (`productID`);
 
 ALTER TABLE
-  `items`
+  `item`
 MODIFY
   `productID` int(11) NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 50;
 
 ALTER TABLE
-  `orders`
+  `sale`
 ADD
   PRIMARY KEY (`purchaseID`);
 
 ALTER TABLE
-  `orders`
+  `sale`
 MODIFY
   `purchaseID` int(11) NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 53;
 
 ALTER TABLE
-  `customers`
+  `customer`
 ADD
   PRIMARY KEY (`customerID`);
 
 ALTER TABLE
-  `customers`
+  `customer`
 MODIFY
   `customerID` int(11) NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 43;
