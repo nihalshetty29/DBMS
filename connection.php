@@ -1,3 +1,3 @@
-<?php 
-$link=mysqli_connect("localhost","root","") or die(mysqli_error($link));
-mysqli_select_db($link,"dbms_project") or die(mysqli_error($link));
+<?php
+$link = mysqli_connect("localhost", "root", "") or die(mysqli_error($link));
+mysqli_select_db($link, "dbms_project") or die(mysqli_error($link));

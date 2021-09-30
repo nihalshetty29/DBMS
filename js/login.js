@@ -4,8 +4,7 @@ $(document).ready(function () {
   });
 });
 
-// Function to login a user
-function login() {
+const login = () => {
   var loginUsername = $('#loginUsername').val();
   var loginPassword = $('#loginPassword').val();
 
@@ -24,4 +23,4 @@ function login() {
       }
     },
   });
-}
+};

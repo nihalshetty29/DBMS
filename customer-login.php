@@ -86,25 +86,18 @@ include "connection.php";
           <label for="username"></label>Username</label>
           <input type="text" name="username" id="username" />
         </div>
-
-
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" name="password" id="password" />
         </div>
-
-        <!-- <button type="submit" class="btn">Log In</button> -->
         <div class="form-actions">
-          <center>
-            <input type="submit" name="submit" value="Login" class="btn btn-success" />
-          </center>
+          <input type="submit" name="submit" value="Login" class="btn btn-success" />
         </div>
         <p class="bottom-text">
           <a href="#">Terms & Conditions</a> and
           <a href="#">Privacy Policy</a>
         </p>
       </form>
-
       <?php
       if (isset($_POST["submit"])) {
 
@@ -118,7 +111,6 @@ include "connection.php";
         if ($count > 0) {
           header('Location: ' . $newURL);
       ?>
-
         <?php
         } else {
 
@@ -130,12 +122,8 @@ include "connection.php";
         }
       }
       ?>
-
-
-
     </div>
   </div>
-
 </body>
 
 </html>
