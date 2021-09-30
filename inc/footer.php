@@ -27,3 +27,4 @@
 
     <!-- Custom scripts -->
     <script src="js/scripts.js"></script>
+    <script src="js/login.js"></script>

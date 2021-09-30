@@ -1,6 +1,6 @@
 <?php
 // Root url for the site
-define('ROOT_URL', 'http://localhost/login/');
+define('ROOT_URL', 'http://localhost/dbms/');
 
 
 // Database parameters
