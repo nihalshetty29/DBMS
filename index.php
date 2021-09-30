@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('inc/header.html');
+require_once('template/admin/header.html');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ require_once('inc/header.html');
     </div>
   </div>
   <?php
-  require 'inc/footer.php';
+  require 'template/admin/footer.php';
   ?>
 </body>
 

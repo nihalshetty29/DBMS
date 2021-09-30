@@ -38,7 +38,7 @@
               <div class="form-group col-md-2">
                 <label for="itemDetailsStatus">Status</label>
                 <select id="itemDetailsStatus" name="itemDetailsStatus" class="form-control chosenSelect">
-                  <?php include('inc/statusList.html'); ?>
+                  <?php include('template/admin/statusList.html'); ?>
                 </select>
               </div>
             </div>

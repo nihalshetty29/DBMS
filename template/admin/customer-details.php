@@ -46,7 +46,7 @@
           <div class="form-group col-md-4">
             <label for="customerDetailsCustomerDistrict">District</label>
             <select id="customerDetailsCustomerDistrict" name="customerDetailsCustomerDistrict" class="form-control chosenSelect">
-              <?php include('inc/districtList.html'); ?>
+              <?php include('template/admin/districtList.html'); ?>
             </select>
           </div>
         </div>
