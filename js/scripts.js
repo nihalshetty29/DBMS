@@ -2113,3 +2113,11 @@ function updateSale() {
     },
   });
 }
+
+document.getElementById('customer-login').addEventListener('click', () => {
+  document.location.href = 'customer-login.php';
+});
+
+document.getElementById('admin-login').addEventListener('click', () => {
+  document.location.href = 'admin-login.php';
+});
