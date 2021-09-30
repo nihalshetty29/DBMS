@@ -8,7 +8,7 @@ if (isset($_SESSION['loggedIn'])) {
 
 require_once('inc/config/constants.php');
 require_once('inc/config/db.php');
-require_once('inc/header.html');
+require_once('template/admin/header.html');
 ?>
 
 <body>
@@ -38,7 +38,7 @@ require_once('inc/header.html');
     </div>
   </div>
   <?php
-  require 'inc/footer.php';
+  require 'template/admin/footer.php';
   ?>
 </body>
 
