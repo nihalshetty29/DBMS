@@ -23,8 +23,8 @@ require_once('template/admin/header.html');
             Role:
           </div>
           <div class="card-body">
-            <button type="button" id="admin-login" class="btn btn-primary btn-block">Admin</button>
-            <button type="button" id="customer-login" class="btn btn-primary btn-block">Customer</button>
+            <button type="button" id="adminLogin" class="btn btn-primary btn-block">Admin</button>
+            <button type="button" id="customerLogin" class="btn btn-primary btn-block">Customer</button>
           </div>
         </div>
       </div>

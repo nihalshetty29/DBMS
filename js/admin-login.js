@@ -12,8 +12,8 @@ const login = () => {
     url: 'model/admin-login/check-login.php',
     method: 'POST',
     data: {
-      loginUsername: loginUsername,
-      loginPassword: loginPassword,
+      loginUsername,
+      loginPassword,
     },
     success: function (data) {
       $('#loginMessage').html(data);
