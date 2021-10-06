@@ -26,3 +26,4 @@
     <!-- Custom scripts -->
     <script src="js/scripts.js"></script>
     <script src="js/admin-login.js"></script>
+    <script src="js/customer-login.js"></script>

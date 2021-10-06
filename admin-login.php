@@ -30,7 +30,7 @@ require_once('template/admin/header.html');
                 <label for="loginPassword">Password</label>
                 <input type="password" class="form-control" id="loginPassword" name="loginPassword">
               </div>
-              <button type="button" id="login" class="btn btn-primary">Login</button>
+              <button type="submit" id="login" class="btn btn-primary">Login</button>
             </form>
           </div>
         </div>

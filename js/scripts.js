@@ -2114,10 +2114,10 @@ function updateSale() {
   });
 }
 
-document.getElementById('customer-login').addEventListener('click', () => {
+document.getElementById('customerLogin').addEventListener('click', () => {
   document.location.href = 'customer-login.php';
 });
 
-document.getElementById('admin-login').addEventListener('click', () => {
+document.getElementById('adminLogin').addEventListener('click', () => {
   document.location.href = 'admin-login.php';
 });

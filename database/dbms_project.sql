@@ -28,14 +28,7 @@ INSERT INTO
   `users` (`userID`, `fullName`, `username`, `password`)
 VALUES
   (
-    5,
-    'Guest',
-    'guest',
-    '81dc9bdb52d04dc20036dbd8313ed055'
-  ),
-  (6, 'a', 'a', '0cc175b9c0f1b6a831c399e269772661'),
-  (
-    7,
+    1,
     'admin',
     'admin',
     '21232f297a57a5a743894a0e4a801fc3'
@@ -44,6 +37,8 @@ VALUES
 CREATE TABLE `customer` (
   `customerID` int(11) NOT NULL,
   `fullName` varchar(100) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
   `mobile` int(11) NOT NULL,
   `phone2` int(11) DEFAULT NULL,
@@ -58,6 +53,8 @@ INSERT INTO
   `customer` (
     `customerID`,
     `fullName`,
+    `username`,
+    `password`,
     `email`,
     `mobile`,
     `phone2`,
@@ -69,8 +66,10 @@ INSERT INTO
   )
 VALUES
   (
-    4,
+    1,
     'Bill Gates',
+    'bill',
+    'e8375d7cd983efcbf956da5937050ffc',
     'bill@microsoft.com',
     993737,
     772484884,
@@ -81,8 +80,10 @@ VALUES
     '2018-04-30 15:14:02'
   ),
   (
-    14,
+    2,
     'Steve Jobs',
+    'steve',
+    'd69403e2673e611d4cbd3fad6fd1788e',
     'sjobs@apple.com',
     333829832,
     0,
@@ -91,115 +92,6 @@ VALUES
     'Las Vegas',
     'Monaragala',
     '2018-05-01 12:03:10'
-  ),
-  (
-    18,
-    'Asitha Silva',
-    'asitha@gmail.com',
-    777987654,
-    0,
-    'No. 3, Radcliff Avenue, School Lane',
-    'Kalutara South',
-    'Kalutara',
-    'Kalutara',
-    '2018-05-02 09:52:28'
-  ),
-  (
-    24,
-    'Sunil Perera',
-    'Sunil@gypsies.sound',
-    338393932,
-    413837293,
-    '67/7, Perera Villa, Jayasekara Avenue',
-    'Mount Lavinia',
-    'Ratmalana',
-    'Colombo',
-    '2018-05-02 10:48:37'
-  ),
-  (
-    25,
-    'Theresa May',
-    'may34@uk.gov.com',
-    329393903,
-    777833737,
-    '12, Downing Street',
-    'London',
-    'London',
-    'Matale',
-    '2018-05-03 02:28:07'
-  ),
-  (
-    26,
-    'Sachin Tendulkar',
-    'sachintendulkar@icc.com',
-    444958303,
-    84792838,
-    '789-4, Apartment 3, ',
-    'Cric Complex',
-    'New Delhi',
-    'Puttalam',
-    '2018-05-03 02:28:38'
-  ),
-  (
-    38,
-    'Nuwan Perara',
-    'nuwan@yahoo.com',
-    839378202,
-    0,
-    'Nuwan Villa, Lower Street,',
-    'North Mulativu',
-    'Mullaitivu',
-    'Mullaitivu',
-    '2018-05-05 11:17:49'
-  ),
-  (
-    39,
-    'Amal Silverton',
-    'amals452@yahoo.com',
-    232345676,
-    0,
-    'Amal\'s House, Amal\'s Street,',
-    'Amal Road',
-    'Ambalangoda',
-    'Galle',
-    '2018-05-05 13:27:06'
-  ),
-  (
-    40,
-    'Andrew Symonds',
-    'symonds@cricket.au.com',
-    123,
-    0,
-    '23, Oak View Avenue',
-    'Western Australia',
-    'Melbourne',
-    'Colombo',
-    '2018-05-13 01:20:23'
-  ),
-  (
-    41,
-    'Mark Taylor',
-    '',
-    111,
-    0,
-    '111',
-    '',
-    '',
-    'Colombo',
-    'Active',
-    '2018-05-13 01:24:54'
-  ),
-  (
-    42,
-    'Nelson Mandela',
-    'sjobs@apple.com',
-    333829832,
-    0,
-    '1st Floor, Apple House, ',
-    'Las Vegas Street',
-    'Las Vegas',
-    'Kalutara',
-    '2018-05-13 02:39:41'
   );
 
 CREATE TABLE `item` (

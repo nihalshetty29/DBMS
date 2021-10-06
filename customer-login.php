@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['loggedIn'])) {
+if (isset($_SESSION['customerLoggedIn'])) {
   header('Location: customer-home.php');
   exit();
 }
@@ -21,7 +21,7 @@ require_once('template/admin/header.html');
           </div>
           <div class="card-body">
             <form action="">
-              <div id="loginMessage"></div>
+              <div id="customerLoginMessage"></div>
               <div class="form-group">
                 <label for="customerLoginUsername">Username</label>
                 <input type="text" class="form-control" id="customerLoginUsername" name="customerLoginUsername">
@@ -30,7 +30,7 @@ require_once('template/admin/header.html');
                 <label for="customerLoginPassword">Password</label>
                 <input type="password" class="form-control" id="customerLoginPassword" name="customerLoginPassword">
               </div>
-              <button type="button" id="login" class="btn btn-primary">Login</button>
+              <button type="submit" id="customerLogin" class="btn btn-primary">Login</button>
             </form>
           </div>
         </div>
